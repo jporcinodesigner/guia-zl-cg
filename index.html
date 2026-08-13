@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia da Região - Zona Leste CG</title>
+
+    <!-- GOOGLE ANALYTICS -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WC8TDMR83V"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-WC8TDMR83V');
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark-top: #1a2332;
+            --bg-dark-body: #0b0f17;
+            --orange-primary: #ff6a00;
+            --orange-gradient: linear-gradient(135deg, #ff8c00 0%, #ff5500 100%);
+            --text-white: #ffffff;
+            --text-muted: #94a3b8;
+            --whatsapp-green: #25d366;
+            --vagas-blue: #0284c7;
+            --imoveis-green: #10b981;
+            --servicos-orange: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark-body);
+            background: linear-gradient(180deg, #182232 0%, #0b0f19 400px, #0b0f19 100%);
+            color: var(--text-white);
+            min-height: 100vh;
+            padding-bottom: 90px;
+            overflow-x: hidden;
+        }
+
+        /* 1. TOP NAVBAR - NAVEGAÇÃO */
+        .top-navbar {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-pin-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--orange-gradient);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(255, 106, 0, 0.4);
+            flex-shrink: 0;
+        }
+
+        .logo-pin-icon span {
+            transform: rotate(45deg);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 20px;
+            color: #ffffff;
+        }
+
+        .nav-brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-brand-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            line-height: 1;
+            color: #ffffff;
+        }
+
+        .nav-brand-subtitle {
+            font-size: 9px;
+            background: var(--orange-gradient);
+            color: #000;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-top: 3px;
+            display: inline-block;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .top-menu-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .top-menu-links::-webkit-scrollbar {
+            display: none;
+        }
+
+        .menu-link {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        .menu-link:hover {
+            color: var(--orange-primary);
+        }
+
+        /* CONTAINER PRINCIPAL */
+        .main-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        /* HERO HEADER SECTION */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .hero-logo-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .main-pin-logo {
+            width: 72px;
+            height: 72px;
+            background: var(--orange-gradient);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(255, 106, 0, 0.45);
+            margin-bottom: 16px;
+        }
+
+        .main-pin-logo span {
+            transform: rotate(45deg);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 42px;
+            color: #ffffff;
+        }
+
+        .hero-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 32px;
+            line-height: 1.05;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .hero-badge-tag {
+            background: var(--orange-gradient);
+            color: #000;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 13px;
+            padding: 4px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 6px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 10px rgba(255, 106, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 14px;
+            line-height: 1.5;
+            font-weight: 400;
+            padding: 0 10px;
+        }
+
+        /* SEARCH BAR */
+        .search-box {
+            background: var(--orange-gradient);
+            border-radius: 30px;
+            padding: 4px 8px 4px 18px;
+            display: flex;
+            align-items: center;
+            margin: 20px 0 28px 0;
+            box-shadow: 0 6px 20px rgba(255, 106, 0, 0.35);
+        }
+
+        .search-box i {
+            color: #ffffff;
+            font-size: 16px;
+            margin-right: 10px;
+            opacity: 0.9;
+        }
+
+        .search-input {
+            border: none;
+            background: transparent;
+            width: 100%;
+            padding: 10px 0;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 400;
+        }
+
+        /* CATEGORIES GRID */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+
+        .cat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .cat-icon-circle {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--orange-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 20px;
+            box-shadow: 0 4px 14px rgba(255, 106, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .cat-item:hover .cat-icon-circle {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 18px rgba(255, 106, 0, 0.5);
+        }
+
+        .cat-label {
+            font-size: 11px;
+            color: #cbd5e1;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* SEÇÕES E TÍTULOS */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .section-header i {
+            color: #fbbf24;
+            font-size: 18px;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 17px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #ffffff;
+        }
+
+        /* CARROSSEL DE DESTAQUES (PAGO) */
+        .carousel-wrapper {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 32px;
+            border-radius: 20px;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            width: 100%;
+        }
+
+        .highlight-card {
+            min-width: 100%;
+            background: linear-gradient(135deg, #ff6a00 0%, #ee5100 100%);
+            border-radius: 20px;
+            padding: 12px;
+            box-shadow: 0 10px 30px rgba(255, 106, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+
+        .highlight-img-container {
+            width: 100%;
+            height: 200px;
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+            background: #1e293b;
+        }
+
+        .highlight-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .highlight-details {
+            padding: 14px 4px 4px 4px;
+        }
+
+        .highlight-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 18px;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .sponsored-tag {
+            background: #000000;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 6px 0 12px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .whatsapp-btn {
+            background: #0b0f17;
+            color: #ffffff;
+            width: 100%;
+            padding: 12px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .whatsapp-btn i {
+            color: var(--whatsapp-green);
+            font-size: 22px;
+        }
+
+        /* LISTA DE VAGAS */
+        .jobs-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .job-card {
+            background: #111723;
+            border-radius: 14px;
+            padding: 16px;
+            border-left: 4px solid var(--vagas-blue);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .job-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 14px;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .job-meta {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* 2. FIXED BOTTOM NAVBAR - BARRA FLUTUANTE INFERIOR */
+        .fixed-bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(11, 15, 23, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+            box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.6);
+        }
+
+        .bottom-actions-scroll {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            width: 100%;
+            max-width: 600px;
+            justify-content: space-between;
+            scrollbar-width: none;
+        }
+
+        .bottom-actions-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .btn-anuncio-orange {
+            background: var(--orange-gradient);
+            color: #ffffff;
+            padding: 10px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+            box-shadow: 0 3px 10px rgba(255, 106, 0, 0.3);
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .btn-anuncio-orange:hover {
+            transform: scale(1.05);
+        }
+
+        /* MODAL DE INSCRIÇÃO */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #131924;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            padding: 24px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .modal-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: #fff;
+        }
+
+        .modal-form-group {
+            margin-bottom: 14px;
+        }
+
+        .modal-label {
+            display: block;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        .modal-input, .modal-select, .modal-textarea {
+            width: 100%;
+            background: #1e293b;
+            border: 1px solid #334155;
+            padding: 10px 14px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .modal-btn-submit {
+            width: 100%;
+            background: var(--orange-gradient);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 640px) {
+            .top-menu-links { gap: 10px; }
+            .menu-link { font-size: 11px; }
+            .categories-grid { gap: 4px; }
+            .cat-icon-circle { width: 46px; height: 46px; font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. TOP NAVBAR: NAVEGAÇÃO INTERNA NA ORDEM SOLICITADA -->
+    <header class="top-navbar">
+        <a href="#" class="nav-logo">
+            <div class="logo-pin-icon">
+                <span>G</span>
+            </div>
+            <div class="nav-brand-text">
+                <span class="nav-brand-title">GUIA DA REGIÃO</span>
+                <span class="nav-brand-subtitle">ZONA LESTE CG</span>
+            </div>
+        </a>
+
+        <nav class="top-menu-links">
+            <a href="#vagas" class="menu-link"><i class="fa-solid fa-briefcase"></i> Vagas</a>
+            <a href="#imoveis" class="menu-link"><i class="fa-solid fa-house"></i> Imóveis</a>
+            <a href="#servicos" class="menu-link"><i class="fa-solid fa-wrench"></i> Serviços</a>
+            <a href="#gastronomia" class="menu-link"><i class="fa-solid fa-utensils"></i> Gastronomia</a>
+            <a href="#destaque" class="menu-link"><i class="fa-solid fa-star"></i> Destaque</a>
+        </nav>
+    </header>
+
+    <!-- CORPO DO SITE -->
+    <main class="main-container">
+
+        <!-- HERO SECTION -->
+        <section class="hero-section">
+            <div class="hero-logo-box">
+                <div class="main-pin-logo">
+                    <span>G</span>
+                </div>
+                <h1 class="hero-title">GUIA DA<br>REGIÃO</h1>
+                <span class="hero-badge-tag">ZONA LESTE CG</span>
+            </div>
+            <p class="hero-subtitle">
+                O mapa de Vagas, Imóveis, Serviços e Gastronomia no Noroeste, Pedrossian, Panorama, Vivendas e Tiradentes
+            </p>
+        </section>
+
+        <!-- SEARCH BAR -->
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" class="search-input" placeholder="O que você procura hoje na Zona Leste?">
+        </div>
+
+        <!-- CATEGORIAS -->
+        <div class="categories-grid">
+            <a href="#vagas" class="cat-item">
+                <div class="cat-icon-circle"><i class="fa-solid fa-briefcase"></i></div>
+                <span class="cat-label">Vagas</span>
+            </a>
+            <a href="#imoveis" class="cat-item">
+                <div class="cat-icon-circle"><i class="fa-solid fa-house"></i></div>
+                <span class="cat-label">Imóveis</span>
+            </a>
+            <a href="#servicos" class="cat-item">
+                <div class="cat-icon-circle"><i class="fa-solid fa-wrench"></i></div>
+                <span class="cat-label">Serviços</span>
+            </a>
+            <a href="#gastronomia" class="cat-item">
+                <div class="cat-icon-circle"><i class="fa-solid fa-utensils"></i></div>
+                <span class="cat-label">Gastronomia</span>
+            </a>
+            <a href="#destaque" class="cat-item">
+                <div class="cat-icon-circle"><i class="fa-solid fa-star"></i></div>
+                <span class="cat-label">Destaque</span>
+            </a>
+        </div>
+
+        <!-- SEÇÃO DESTAQUE (ESPAÇO PAGO DO TOPO COM CARROSSEL) -->
+        <section id="destaque">
+            <div class="section-header">
+                <i class="fa-solid fa-star"></i>
+                <h2 class="section-title">DESTAQUES DA REGIÃO</h2>
+            </div>
+
+            <div class="carousel-wrapper">
+                <div class="carousel-track" id="carouselTrack">
+                    <!-- Destaque 1 -->
+                    <div class="highlight-card">
+                        <div class="highlight-img-container">
+                            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80" alt="Destaque Especial 1">
+                        </div>
+                        <div class="highlight-details">
+                            <h3 class="highlight-name">SEU NEGÓCIO AQUI EM DESTAQUE</h3>
+                            <span class="sponsored-tag">Patrocinado</span>
+                            <a href="https://wa.me/5567999999999?text=Olá,%20quero%20destacar%20meu%20anúncio%20no%20topo%20do%20Guia!" target="_blank" class="whatsapp-btn">
+                                <i class="fa-brands fa-whatsapp"></i> QUERO ESTE DESTAQUE PAGO
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Destaque 2 -->
+                    <div class="highlight-card">
+                        <div class="highlight-img-container">
+                            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" alt="Destaque Especial 2">
+                        </div>
+                        <div class="highlight-details">
+                            <h3 class="highlight-name">ANUNCIE COM VISIBILIDADE MÁXIMA</h3>
+                            <span class="sponsored-tag">Patrocinado</span>
+                            <a href="https://wa.me/5567999999999?text=Olá,%20quero%20destacar%20meu%20anúncio%20no%20topo%20do%20Guia!" target="_blank" class="whatsapp-btn">
+                                <i class="fa-brands fa-whatsapp"></i> QUERO ESTE DESTAQUE PAGO
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Destaque 3 -->
+                    <div class="highlight-card">
+                        <div class="highlight-img-container">
+                            <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=800&q=80" alt="Destaque Especial 3">
+                        </div>
+                        <div class="highlight-details">
+                            <h3 class="highlight-name">ALCANCE MAIS CLIENTES NA ZONA LESTE</h3>
+                            <span class="sponsored-tag">Patrocinado</span>
+                            <a href="https://wa.me/5567999999999?text=Olá,%20quero%20destacar%20meu%20anúncio%20no%20topo%20do%20Guia!" target="_blank" class="whatsapp-btn">
+                                <i class="fa-brands fa-whatsapp"></i> QUERO ESTE DESTAQUE PAGO
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO VAGAS -->
+        <section id="vagas">
+            <div class="section-header">
+                <i class="fa-solid fa-clipboard-list" style="color: #38bdf8;"></i>
+                <h2 class="section-title">ÚLTIMAS VAGAS POSTADAS</h2>
+            </div>
+            <div class="jobs-list">
+                <div class="job-card">
+                    <div class="job-title">ATENDENTE DE LOJA - PANORAMA</div>
+                    <div class="job-meta">
+                        <span><i class="fa-regular fa-clock"></i> Horário comercial</span>
+                        <span>•</span>
+                        <span><i class="fa-solid fa-dollar-sign"></i> Salário a combinar</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO IMÓVEIS -->
+        <section id="imoveis" style="margin-bottom: 32px;">
+            <div class="section-header">
+                <i class="fa-solid fa-house" style="color: #10b981;"></i>
+                <h2 class="section-title">IMÓVEIS NA REGIÃO</h2>
+            </div>
+            <p style="font-size: 13px; color: #94a3b8;">Confira as últimas opções de aluguel e venda na Zona Leste.</p>
+        </section>
+
+        <!-- SEÇÃO SERVIÇOS -->
+        <section id="servicos" style="margin-bottom: 32px;">
+            <div class="section-header">
+                <i class="fa-solid fa-wrench" style="color: #f59e0b;"></i>
+                <h2 class="section-title">SERVIÇOS LOCAIS</h2>
+            </div>
+            <p style="font-size: 13px; color: #94a3b8;">Encontre profissionais e comércios no seu bairro.</p>
+        </section>
+
+        <!-- SEÇÃO GASTRONOMIA -->
+        <section id="gastronomia" style="margin-bottom: 32px;">
+            <div class="section-header">
+                <i class="fa-solid fa-utensils" style="color: #ef4444;"></i>
+                <h2 class="section-title">GASTRONOMIA & SABOR</h2>
+            </div>
+            <p style="font-size: 13px; color: #94a3b8;">Marmitarias, lanchonetes e docerias da região.</p>
+        </section>
+
+    </main>
+
+    <!-- 2. FIXED BOTTOM NAVBAR: BOTÕES DE AÇÃO NA MESMA ORDEM EXACTA -->
+    <div class="fixed-bottom-nav">
+        <div class="bottom-actions-scroll">
+            <!-- Botão 1: + Vagas -->
+            <a href="#" onclick="openModal('vaga'); return false;" class="btn-anuncio-orange">
+                <i class="fa-solid fa-plus"></i> Vagas
+            </a>
+            <!-- Botão 2: + Imóveis -->
+            <a href="#" onclick="openModal('imovel'); return false;" class="btn-anuncio-orange">
+                <i class="fa-solid fa-plus"></i> Imóveis
+            </a>
+            <!-- Botão 3: + Serviços -->
+            <a href="#" onclick="openModal('servico'); return false;" class="btn-anuncio-orange">
+                <i class="fa-solid fa-plus"></i> Serviços
+            </a>
+            <!-- Botão 4: + Gastronomia -->
+            <a href="#" onclick="openModal('gastronomia'); return false;" class="btn-anuncio-orange">
+                <i class="fa-solid fa-plus"></i> Gastronomia
+            </a>
+            <!-- Botão 5: + Destaque (Pago) -->
+            <a href="#" onclick="openModal('destaque'); return false;" class="btn-anuncio-orange">
+                <i class="fa-solid fa-star"></i> Destaque
+            </a>
+        </div>
+    </div>
+
+    <!-- MODAL DE CADASTRO -->
+    <div class="modal-overlay" id="announceModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="modal-title" id="modalTitle">Inscrição de Anúncio</h3>
+            
+            <form onsubmit="handleFormSubmit(event)">
+                <div class="modal-form-group">
+                    <label class="modal-label">Selecione a Categoria</label>
+                    <select class="modal-select" id="modalCategory">
+                        <option value="vaga">Vagas de Emprego / Bico</option>
+                        <option value="imovel">Aluguel / Venda de Imóveis</option>
+                        <option value="servico">Serviços e Comércios</option>
+                        <option value="gastronomia">Gastronomia</option>
+                        <option value="destaque">Destaque Pago no Topo</option>
+                    </select>
+                </div>
+
+                <div class="modal-form-group">
+                    <label class="modal-label">Título do Anúncio / Nome do Negócio</label>
+                    <input type="text" class="modal-input" placeholder="Ex: Atendente de Loja ou Marmitaria Silva" required>
+                </div>
+
+                <div class="modal-form-group">
+                    <label class="modal-label">Bairro na Zona Leste</label>
+                    <select class="modal-select" required>
+                        <option value="Tiradentes">Tiradentes</option>
+                        <option value="Pedrossian">Pedrossian</option>
+                        <option value="Noroeste">Noroeste</option>
+                        <option value="Panorama">Panorama</option>
+                        <option value="Vivendas">Vivendas</option>
+                        <option value="Outro">Outro Bairro</option>
+                    </select>
+                </div>
+
+                <div class="modal-form-group">
+                    <label class="modal-label">Descrição Rápida</label>
+                    <textarea class="modal-textarea" rows="3" placeholder="Descreva os detalhes..." required></textarea>
+                </div>
+
+                <div class="modal-form-group">
+                    <label class="modal-label">Seu WhatsApp de Contato</label>
+                    <input type="tel" class="modal-input" placeholder="(67) 99999-9999" required>
+                </div>
+
+                <button type="submit" class="modal-btn-submit" id="modalSubmitBtn">ENVIAR ANÚNCIO</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        /* FUNÇÕES DO MODAL */
+        function openModal(type) {
+            const modal = document.getElementById('announceModal');
+            const catSelect = document.getElementById('modalCategory');
+            const title = document.getElementById('modalTitle');
+            const submitBtn = document.getElementById('modalSubmitBtn');
+            
+            if(type === 'vaga') {
+                catSelect.value = 'vaga';
+                title.innerText = 'Publicar em Vagas';
+                submitBtn.innerText = 'ENVIAR PARA ANÁLISE GRÁTIS';
+            } else if(type === 'imovel') {
+                catSelect.value = 'imovel';
+                title.innerText = 'Publicar em Imóveis';
+                submitBtn.innerText = 'ENVIAR PARA ANÁLISE GRÁTIS';
+            } else if(type === 'servico') {
+                catSelect.value = 'servico';
+                title.innerText = 'Publicar em Serviços';
+                submitBtn.innerText = 'ENVIAR PARA ANÁLISE GRÁTIS';
+            } else if(type === 'gastronomia') {
+                catSelect.value = 'gastronomia';
+                title.innerText = 'Publicar em Gastronomia';
+                submitBtn.innerText = 'ENVIAR PARA ANÁLISE GRÁTIS';
+            } else if(type === 'destaque') {
+                catSelect.value = 'destaque';
+                title.innerText = 'Solicitar Destaque Pago no Topo';
+                submitBtn.innerText = 'SOLICITAR ORÇAMENTO DE DESTAQUE';
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('announceModal').style.display = 'none';
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            alert('🎉 Solicitação enviada com sucesso!\n\nEm breve entraremos em contato.');
+            closeModal();
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('announceModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        /* LÓGICA DO CARROSSEL AUTOMÁTICO (2,5 segundos) */
+        let currentSlide = 0;
+        const track = document.getElementById('carouselTrack');
+        const slides = document.querySelectorAll('.highlight-card');
+        const totalSlides = slides.length;
+
+        function moveCarousel() {
+            if (totalSlides === 0) return;
+            currentSlide = (currentSlide + 1) % totalSlides;
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        if (totalSlides > 1) {
+            setInterval(moveCarousel, 2500);
+        }
+    </script>
+</body>
+</html>
