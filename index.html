@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guia da Região - Zona Leste CG</title>
 
-    <!-- GOOGLE ANALYTICS -->
+    <link rel="icon" type="image/png" href="https://i.ibb.co/TMGDj3cz/tag-site.png">
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WC8TDMR83V"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -15,14 +16,11 @@
       gtag('config', 'G-WC8TDMR83V');
     </script>
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- SUPABASE SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -218,17 +216,6 @@
             margin-top: 6px;
             letter-spacing: 0.5px;
             box-shadow: 0 2px 10px rgba(255, 106, 0, 0.3);
-        }
-
-        .hero-tag-banner {
-            margin-top: 15px;
-            display: block;
-        }
-
-        .hero-tag-banner img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 12px;
         }
 
         .hero-subtitle {
@@ -668,7 +655,6 @@
 </head>
 <body>
 
-    <!-- 1. TOP NAVBAR: NAVEGAÇÃO INTERNA NA ORDEM SOLICITADA -->
     <header class="top-navbar">
         <a href="#" class="nav-logo">
             <div class="logo-pin-icon">
@@ -689,10 +675,8 @@
         </nav>
     </header>
 
-    <!-- CORPO DO SITE -->
     <main class="main-container">
 
-        <!-- HERO SECTION -->
         <section class="hero-section">
             <div class="hero-logo-box">
                 <div class="main-pin-logo">
@@ -700,24 +684,17 @@
                 </div>
                 <h1 class="hero-title">GUIA DA<br>REGIÃO</h1>
                 <span class="hero-badge-tag">ZONA LESTE CG</span>
-
-                <!-- TAG DO SITE -->
-                <a href="https://ibb.co/Kxgc4v6C" target="_blank" rel="noopener noreferrer" class="hero-tag-banner">
-                    <img src="https://i.ibb.co/TMGDj3cz/tag-site.png" alt="tag-site" border="0">
-                </a>
             </div>
             <p class="hero-subtitle">
                 O mapa de Vagas, Imóveis, Serviços e Gastronomia no Noroeste, Pedrossian, Panorama, Vivendas e Tiradentes
             </p>
         </section>
 
-        <!-- SEARCH BAR -->
         <div class="search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" class="search-input" id="searchInput" placeholder="O que você procura hoje na Zona Leste?">
         </div>
 
-        <!-- CATEGORIAS -->
         <div class="categories-grid">
             <a href="#vagas" class="cat-item">
                 <div class="cat-icon-circle"><i class="fa-solid fa-briefcase"></i></div>
@@ -741,7 +718,6 @@
             </a>
         </div>
 
-        <!-- SEÇÃO DESTAQUE (ESPAÇO PAGO DO TOPO COM CARROSSEL) -->
         <section id="destaque">
             <div class="section-header">
                 <i class="fa-solid fa-star"></i>
@@ -750,7 +726,6 @@
 
             <div class="carousel-wrapper">
                 <div class="carousel-track" id="carouselTrack">
-                    <!-- Destaque 1 -->
                     <div class="highlight-card">
                         <div class="highlight-img-container">
                             <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80" alt="Destaque Especial 1">
@@ -763,7 +738,6 @@
                             </a>
                         </div>
                     </div>
-                    <!-- Destaque 2 -->
                     <div class="highlight-card">
                         <div class="highlight-img-container">
                             <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" alt="Destaque Especial 2">
@@ -776,7 +750,6 @@
                             </a>
                         </div>
                     </div>
-                    <!-- Destaque 3 -->
                     <div class="highlight-card">
                         <div class="highlight-img-container">
                             <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=800&q=80" alt="Destaque Especial 3">
@@ -793,7 +766,6 @@
             </div>
         </section>
 
-        <!-- SEÇÃO VAGAS -->
         <section id="vagas">
             <div class="section-header">
                 <i class="fa-solid fa-clipboard-list" style="color: #38bdf8;"></i>
@@ -804,7 +776,6 @@
             </div>
         </section>
 
-        <!-- SEÇÃO IMÓVEIS -->
         <section id="imoveis" style="margin-bottom: 32px;">
             <div class="section-header">
                 <i class="fa-solid fa-house" style="color: #10b981;"></i>
@@ -815,7 +786,6 @@
             </div>
         </section>
 
-        <!-- SEÇÃO SERVIÇOS -->
         <section id="servicos" style="margin-bottom: 32px;">
             <div class="section-header">
                 <i class="fa-solid fa-wrench" style="color: #f59e0b;"></i>
@@ -826,7 +796,6 @@
             </div>
         </section>
 
-        <!-- SEÇÃO GASTRONOMIA -->
         <section id="gastronomia" style="margin-bottom: 32px;">
             <div class="section-header">
                 <i class="fa-solid fa-utensils" style="color: #ef4444;"></i>
@@ -839,7 +808,6 @@
 
     </main>
 
-    <!-- 2. FIXED BOTTOM NAVBAR: BOTÕES DE AÇÃO NA MESMA ORDEM EXACTA -->
     <div class="fixed-bottom-nav">
         <div class="bottom-actions-scroll">
             <a href="#" onclick="openModal('vaga'); return false;" class="btn-anuncio-orange">
@@ -860,7 +828,6 @@
         </div>
     </div>
 
-    <!-- MODAL DE CADASTRO -->
     <div class="modal-overlay" id="announceModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -900,7 +867,6 @@
                     <textarea class="modal-textarea" id="inputDescricao" rows="3" placeholder="Descreva os detalhes..." required></textarea>
                 </div>
 
-                <!-- UPLOAD DE IMAGEM -->
                 <div class="modal-form-group">
                     <label class="modal-label">Foto / Banner do Anúncio (Opcional)</label>
                     <label for="inputImagem" class="file-upload-box">
@@ -920,7 +886,6 @@
         </div>
     </div>
 
-    <!-- SCRIPTS -->
     <script>
         /* CONEXÃO SUPABASE */
         const SUPABASE_URL = 'https://hdhlxdqhufcclbyhgexz.supabase.co';
