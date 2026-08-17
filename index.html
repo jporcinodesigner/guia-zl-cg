@@ -738,30 +738,6 @@
                             </a>
                         </div>
                     </div>
-                    <div class="highlight-card">
-                        <div class="highlight-img-container">
-                            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" alt="Destaque Especial 2">
-                        </div>
-                        <div class="highlight-details">
-                            <h3 class="highlight-name">ANUNCIE COM VISIBILIDADE MÁXIMA</h3>
-                            <span class="sponsored-tag">Patrocinado</span>
-                            <a href="https://wa.me/5567999999999?text=Olá,%20quero%20destacar%20meu%20anúncio%20no%20topo%20do%20Guia!" target="_blank" class="whatsapp-btn">
-                                <i class="fa-brands fa-whatsapp"></i> QUERO ESTE DESTAQUE PAGO
-                            </a>
-                        </div>
-                    </div>
-                    <div class="highlight-card">
-                        <div class="highlight-img-container">
-                            <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=800&q=80" alt="Destaque Especial 3">
-                        </div>
-                        <div class="highlight-details">
-                            <h3 class="highlight-name">ALCANCE MAIS CLIENTES NA ZONA LESTE</h3>
-                            <span class="sponsored-tag">Patrocinado</span>
-                            <a href="https://wa.me/5567999999999?text=Olá,%20quero%20destacar%20meu%20anúncio%20no%20topo%20do%20Guia!" target="_blank" class="whatsapp-btn">
-                                <i class="fa-brands fa-whatsapp"></i> QUERO ESTE DESTAQUE PAGO
-                            </a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -906,7 +882,8 @@
         async function carregarDados() {
             const { data, error } = await _supabase
                 .from('comercio')
-                .select('*');
+                .select('*')
+                .eq('status', 'aprovado');
 
             if (error) {
                 console.error('Erro ao buscar dados:', error);
@@ -921,12 +898,45 @@
                 gastronomia: document.getElementById('container-gastronomia')
             };
 
+            const carouselTrack = document.getElementById('carouselTrack');
+
             // Limpa mensagens de carregando
             Object.values(containers).forEach(c => { if(c) c.innerHTML = ''; });
 
+            // 1. FILTRAR E CARREGAR DESTAQUES PAGOS NO TOP
+            const destaquesPagos = data.filter(item => item.plano === 'pago' || item.categoria === 'destaque');
+            const anunciosNormais = data.filter(item => item.plano !== 'pago' && item.categoria !== 'destaque');
+
+            if (destaquesPagos.length > 0 && carouselTrack) {
+                carouselTrack.innerHTML = ''; // Limpa destaques fixos
+                destaquesPagos.forEach(item => {
+                    const cleanPhone = (item.whatsapp || '').replace(/\D/g, '');
+                    const waUrl = cleanPhone ? `https://wa.me/55${cleanPhone}?text=Olá,%20vi%20seu%20destaque%20no%20Guia%20Zona%20Leste!` : '#';
+                    const imgUrl = item.midia_url || item.imagem_url || 'https://via.placeholder.com/800x400';
+
+                    const slide = document.createElement('div');
+                    slide.className = 'highlight-card';
+                    slide.innerHTML = `
+                        <div class="highlight-img-container">
+                            <img src="${imgUrl}" alt="${item.nome || 'Destaque'}">
+                        </div>
+                        <div class="highlight-details">
+                            <h3 class="highlight-name">${item.nome || 'DESTAQUE ESPECIAL'}</h3>
+                            <span class="sponsored-tag">Patrocinado</span>
+                            <a href="${waUrl}" target="_blank" class="whatsapp-btn">
+                                <i class="fa-brands fa-whatsapp"></i> ENTRAR EM CONTATO
+                            </a>
+                        </div>
+                    `;
+                    carouselTrack.appendChild(slide);
+                });
+                iniciarCarrossel();
+            }
+
+            // 2. RENDERIZAR ANÚNCIOS NORMAIS NAS CATEGORIAS
             const contadores = { vaga: 0, imovel: 0, servico: 0, gastronomia: 0 };
 
-            data.forEach(item => {
+            anunciosNormais.forEach(item => {
                 const cat = item.categoria || 'servico';
                 const targetContainer = containers[cat];
 
@@ -934,11 +944,12 @@
                     contadores[cat]++;
                     const cleanPhone = (item.whatsapp || '').replace(/\D/g, '');
                     const waUrl = cleanPhone ? `https://wa.me/55${cleanPhone}?text=Olá,%20vi%20seu%20anúncio%20no%20Guia%20Zona%20Leste!` : '#';
+                    const imgUrl = item.midia_url || item.imagem_url;
 
                     const card = document.createElement('div');
                     card.className = 'custom-card';
                     card.innerHTML = `
-                        ${item.imagem_url ? `<img src="${item.imagem_url}" class="card-img-preview" alt="${item.nome}">` : ''}
+                        ${imgUrl ? `<img src="${imgUrl}" class="card-img-preview" alt="${item.nome}">` : ''}
                         <div class="card-title">${item.nome || 'Anúncio'}</div>
                         <div class="card-meta">
                             <span><i class="fa-solid fa-location-dot"></i> ${item.bairro || 'Zona Leste'}</span>
@@ -965,7 +976,6 @@
         /* ENVIO DO FORMULÁRIO COM UPLOAD DE IMAGEM PARA O SUPABASE */
         async function handleFormSubmit(e) {
             e.preventDefault();
-
             const submitBtn = document.getElementById('modalSubmitBtn');
             submitBtn.disabled = true;
             submitBtn.innerText = 'ENVIANDO...';
@@ -979,7 +989,6 @@
 
             let imageUrl = null;
 
-            // Faz o upload do arquivo se tiver uma imagem selecionada
             if (imageInput.files && imageInput.files.length > 0) {
                 const file = imageInput.files[0];
                 const fileExt = file.name.split('.').pop();
@@ -992,7 +1001,6 @@
                 if (uploadError) {
                     console.error('Erro no upload da imagem:', uploadError);
                 } else {
-                    // Pega a URL pública da imagem enviada
                     const { data: publicUrlData } = _supabase.storage
                         .from('banners')
                         .getPublicUrl(fileName);
@@ -1000,11 +1008,11 @@
                 }
             }
 
-            // Insere no banco de dados com a URL da imagem
+            // Insere no banco com a coluna midia_url
             const { data, error } = await _supabase
                 .from('comercio')
                 .insert([
-                    { categoria, nome, bairro, descricao, whatsapp, imagem_url: imageUrl }
+                    { categoria, nome, bairro, descricao, whatsapp, midia_url: imageUrl, status: 'pendente' }
                 ]);
 
             submitBtn.disabled = false;
@@ -1026,7 +1034,7 @@
             const catSelect = document.getElementById('modalCategory');
             const title = document.getElementById('modalTitle');
             const submitBtn = document.getElementById('modalSubmitBtn');
-            
+
             if(type === 'vaga') {
                 catSelect.value = 'vaga';
                 title.innerText = 'Publicar em Vagas';
@@ -1063,20 +1071,22 @@
             }
         }
 
-        /* LÓGICA DO CARROSSEL AUTOMÁTICO (2,5 segundos) */
-        let currentSlide = 0;
-        const track = document.getElementById('carouselTrack');
-        const slides = document.querySelectorAll('.highlight-card');
-        const totalSlides = slides.length;
+        /* LÓGICA DO CARROSSEL AUTOMÁTICO */
+        let carouselInterval = null;
+        function iniciarCarrossel() {
+            let currentSlide = 0;
+            const track = document.getElementById('carouselTrack');
+            const slides = track.querySelectorAll('.highlight-card');
+            const totalSlides = slides.length;
 
-        function moveCarousel() {
-            if (totalSlides === 0) return;
-            currentSlide = (currentSlide + 1) % totalSlides;
-            track.style.transform = `translateX(-${currentSlide * 100}%)`;
-        }
+            if (carouselInterval) clearInterval(carouselInterval);
 
-        if (totalSlides > 1) {
-            setInterval(moveCarousel, 2500);
+            if (totalSlides > 1) {
+                carouselInterval = setInterval(() => {
+                    currentSlide = (currentSlide + 1) % totalSlides;
+                    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+                }, 2500);
+            }
         }
 
         // Carregar anúncios do Supabase ao iniciar
