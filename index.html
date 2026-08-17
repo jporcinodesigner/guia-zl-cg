@@ -22,6 +22,9 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- SUPABASE SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
         :root {
             --bg-dark-top: #1a2332;
@@ -415,24 +418,23 @@
             font-size: 22px;
         }
 
-        /* LISTA DE VAGAS */
-        .jobs-list {
+        /* LISTA DE CARDS GERADOS DINAMICAMENTE */
+        .cards-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
             margin-bottom: 32px;
         }
 
-        .job-card {
+        .custom-card {
             background: #111723;
             border-radius: 14px;
             padding: 16px;
             border-left: 4px solid var(--vagas-blue);
             transition: all 0.2s;
-            cursor: pointer;
         }
 
-        .job-title {
+        .card-title {
             font-family: 'Montserrat', sans-serif;
             font-weight: 800;
             font-size: 14px;
@@ -441,13 +443,35 @@
             letter-spacing: 0.3px;
         }
 
-        .job-meta {
+        .card-meta {
             font-size: 12px;
             color: #94a3b8;
-            margin-top: 4px;
+            margin-top: 6px;
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+        }
+
+        .card-desc {
+            font-size: 12px;
+            color: #cbd5e1;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        .card-whatsapp-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--whatsapp-green);
+            color: #000;
+            font-weight: 700;
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            text-decoration: none;
+            margin-top: 10px;
         }
 
         /* 2. FIXED BOTTOM NAVBAR - BARRA FLUTUANTE INFERIOR */
@@ -638,7 +662,7 @@
         <!-- SEARCH BAR -->
         <div class="search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" class="search-input" placeholder="O que você procura hoje na Zona Leste?">
+            <input type="text" class="search-input" id="searchInput" placeholder="O que você procura hoje na Zona Leste?">
         </div>
 
         <!-- CATEGORIAS -->
@@ -723,15 +747,8 @@
                 <i class="fa-solid fa-clipboard-list" style="color: #38bdf8;"></i>
                 <h2 class="section-title">ÚLTIMAS VAGAS POSTADAS</h2>
             </div>
-            <div class="jobs-list">
-                <div class="job-card">
-                    <div class="job-title">ATENDENTE DE LOJA - PANORAMA</div>
-                    <div class="job-meta">
-                        <span><i class="fa-regular fa-clock"></i> Horário comercial</span>
-                        <span>•</span>
-                        <span><i class="fa-solid fa-dollar-sign"></i> Salário a combinar</span>
-                    </div>
-                </div>
+            <div class="cards-list" id="container-vagas">
+                <p style="font-size: 13px; color: #94a3b8;">Carregando vagas...</p>
             </div>
         </section>
 
@@ -741,7 +758,9 @@
                 <i class="fa-solid fa-house" style="color: #10b981;"></i>
                 <h2 class="section-title">IMÓVEIS NA REGIÃO</h2>
             </div>
-            <p style="font-size: 13px; color: #94a3b8;">Confira as últimas opções de aluguel e venda na Zona Leste.</p>
+            <div class="cards-list" id="container-imoveis">
+                <p style="font-size: 13px; color: #94a3b8;">Carregando imóveis...</p>
+            </div>
         </section>
 
         <!-- SEÇÃO SERVIÇOS -->
@@ -750,7 +769,9 @@
                 <i class="fa-solid fa-wrench" style="color: #f59e0b;"></i>
                 <h2 class="section-title">SERVIÇOS LOCAIS</h2>
             </div>
-            <p style="font-size: 13px; color: #94a3b8;">Encontre profissionais e comércios no seu bairro.</p>
+            <div class="cards-list" id="container-servicos">
+                <p style="font-size: 13px; color: #94a3b8;">Carregando serviços...</p>
+            </div>
         </section>
 
         <!-- SEÇÃO GASTRONOMIA -->
@@ -759,7 +780,9 @@
                 <i class="fa-solid fa-utensils" style="color: #ef4444;"></i>
                 <h2 class="section-title">GASTRONOMIA & SABOR</h2>
             </div>
-            <p style="font-size: 13px; color: #94a3b8;">Marmitarias, lanchonetes e docerias da região.</p>
+            <div class="cards-list" id="container-gastronomia">
+                <p style="font-size: 13px; color: #94a3b8;">Carregando opções gastronômicas...</p>
+            </div>
         </section>
 
     </main>
@@ -767,23 +790,18 @@
     <!-- 2. FIXED BOTTOM NAVBAR: BOTÕES DE AÇÃO NA MESMA ORDEM EXACTA -->
     <div class="fixed-bottom-nav">
         <div class="bottom-actions-scroll">
-            <!-- Botão 1: + Vagas -->
             <a href="#" onclick="openModal('vaga'); return false;" class="btn-anuncio-orange">
                 <i class="fa-solid fa-plus"></i> Vagas
             </a>
-            <!-- Botão 2: + Imóveis -->
             <a href="#" onclick="openModal('imovel'); return false;" class="btn-anuncio-orange">
                 <i class="fa-solid fa-plus"></i> Imóveis
             </a>
-            <!-- Botão 3: + Serviços -->
             <a href="#" onclick="openModal('servico'); return false;" class="btn-anuncio-orange">
                 <i class="fa-solid fa-plus"></i> Serviços
             </a>
-            <!-- Botão 4: + Gastronomia -->
             <a href="#" onclick="openModal('gastronomia'); return false;" class="btn-anuncio-orange">
                 <i class="fa-solid fa-plus"></i> Gastronomia
             </a>
-            <!-- Botão 5: + Destaque (Pago) -->
             <a href="#" onclick="openModal('destaque'); return false;" class="btn-anuncio-orange">
                 <i class="fa-solid fa-star"></i> Destaque
             </a>
@@ -799,7 +817,7 @@
             <form onsubmit="handleFormSubmit(event)">
                 <div class="modal-form-group">
                     <label class="modal-label">Selecione a Categoria</label>
-                    <select class="modal-select" id="modalCategory">
+                    <select class="modal-select" id="modalCategory" required>
                         <option value="vaga">Vagas de Emprego / Bico</option>
                         <option value="imovel">Aluguel / Venda de Imóveis</option>
                         <option value="servico">Serviços e Comércios</option>
@@ -810,12 +828,12 @@
 
                 <div class="modal-form-group">
                     <label class="modal-label">Título do Anúncio / Nome do Negócio</label>
-                    <input type="text" class="modal-input" placeholder="Ex: Atendente de Loja ou Marmitaria Silva" required>
+                    <input type="text" class="modal-input" id="inputNome" placeholder="Ex: Atendente de Loja ou Marmitaria Silva" required>
                 </div>
 
                 <div class="modal-form-group">
                     <label class="modal-label">Bairro na Zona Leste</label>
-                    <select class="modal-select" required>
+                    <select class="modal-select" id="selectBairro" required>
                         <option value="Tiradentes">Tiradentes</option>
                         <option value="Pedrossian">Pedrossian</option>
                         <option value="Noroeste">Noroeste</option>
@@ -827,12 +845,12 @@
 
                 <div class="modal-form-group">
                     <label class="modal-label">Descrição Rápida</label>
-                    <textarea class="modal-textarea" rows="3" placeholder="Descreva os detalhes..." required></textarea>
+                    <textarea class="modal-textarea" id="inputDescricao" rows="3" placeholder="Descreva os detalhes..." required></textarea>
                 </div>
 
                 <div class="modal-form-group">
                     <label class="modal-label">Seu WhatsApp de Contato</label>
-                    <input type="tel" class="modal-input" placeholder="(67) 99999-9999" required>
+                    <input type="tel" class="modal-input" id="inputWhatsapp" placeholder="(67) 99999-9999" required>
                 </div>
 
                 <button type="submit" class="modal-btn-submit" id="modalSubmitBtn">ENVIAR ANÚNCIO</button>
@@ -842,6 +860,102 @@
 
     <!-- SCRIPTS -->
     <script>
+        /* CONEXÃO SUPABASE */
+        const SUPABASE_URL = 'https://hdhlxdqhufcclbyhgexz.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_SUpB-jL8O1jj0RNUGZN6Aw_zOQ1POrV';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        /* BUSCAR COMÉRCIOS APROVADOS E EXIBIR */
+        async function carregarDados() {
+            const { data, error } = await _supabase
+                .from('comercio')
+                .select('*');
+
+            if (error) {
+                console.error('Erro ao buscar dados:', error);
+                return;
+            }
+
+            // Mapeamento de containers
+            const containers = {
+                vaga: document.getElementById('container-vagas'),
+                imovel: document.getElementById('container-imoveis'),
+                servico: document.getElementById('container-servicos'),
+                gastronomia: document.getElementById('container-gastronomia')
+            };
+
+            // Limpa mensagens de carregando
+            Object.values(containers).forEach(c => { if(c) c.innerHTML = ''; });
+
+            const contadores = { vaga: 0, imovel: 0, servico: 0, gastronomia: 0 };
+
+            data.forEach(item => {
+                const cat = item.categoria || 'servico';
+                const targetContainer = containers[cat];
+
+                if (targetContainer) {
+                    contadores[cat]++;
+                    const cleanPhone = (item.whatsapp || '').replace(/\D/g, '');
+                    const waUrl = cleanPhone ? `https://wa.me/55${cleanPhone}?text=Olá,%20vi%20seu%20anúncio%20no%20Guia%20Zona%20Leste!` : '#';
+
+                    const card = document.createElement('div');
+                    card.className = 'custom-card';
+                    card.innerHTML = `
+                        <div class="card-title">${item.nome || 'Anúncio'}</div>
+                        <div class="card-meta">
+                            <span><i class="fa-solid fa-location-dot"></i> ${item.bairro || 'Zona Leste'}</span>
+                        </div>
+                        ${item.descricao ? `<div class="card-desc">${item.descricao}</div>` : ''}
+                        ${cleanPhone ? `
+                            <a href="${waUrl}" target="_blank" class="card-whatsapp-link">
+                                <i class="fa-brands fa-whatsapp"></i> Chamar no WhatsApp
+                            </a>
+                        ` : ''}
+                    `;
+                    targetContainer.appendChild(card);
+                }
+            });
+
+            // Se a categoria estiver vazia, exibe mensagem
+            Object.keys(containers).forEach(cat => {
+                if (contadores[cat] === 0 && containers[cat]) {
+                    containers[cat].innerHTML = '<p style="font-size: 12px; color: #64748b;">Nenhum anúncio cadastrado nesta seção ainda.</p>';
+                }
+            });
+        }
+
+        /* ENVIO DO FORMULÁRIO PARA O SUPABASE */
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('modalSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'ENVIANDO...';
+
+            const categoria = document.getElementById('modalCategory').value;
+            const nome = document.getElementById('inputNome').value;
+            const bairro = document.getElementById('selectBairro').value;
+            const descricao = document.getElementById('inputDescricao').value;
+            const whatsapp = document.getElementById('inputWhatsapp').value;
+
+            const { data, error } = await _supabase
+                .from('comercio')
+                .insert([
+                    { categoria, nome, bairro, descricao, whatsapp }
+                ]);
+
+            submitBtn.disabled = false;
+
+            if (error) {
+                console.error('Erro ao enviar:', error);
+                alert('Ops! Houve um erro ao enviar seu anúncio. Tente novamente.');
+            } else {
+                alert('🎉 Solicitação enviada com sucesso!\n\nSeu anúncio foi cadastrado e passará por análise antes de ser publicado.');
+                e.target.reset();
+                closeModal();
+            }
+        }
+
         /* FUNÇÕES DO MODAL */
         function openModal(type) {
             const modal = document.getElementById('announceModal');
@@ -878,12 +992,6 @@
             document.getElementById('announceModal').style.display = 'none';
         }
 
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            alert('🎉 Solicitação enviada com sucesso!\n\nEm breve entraremos em contato.');
-            closeModal();
-        }
-
         window.onclick = function(event) {
             const modal = document.getElementById('announceModal');
             if (event.target == modal) {
@@ -906,6 +1014,9 @@
         if (totalSlides > 1) {
             setInterval(moveCarousel, 2500);
         }
+
+        // Carregar anúncios do Supabase ao iniciar
+        window.addEventListener('DOMContentLoaded', carregarDados);
     </script>
 </body>
 </html>
