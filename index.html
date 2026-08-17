@@ -220,6 +220,17 @@
             box-shadow: 0 2px 10px rgba(255, 106, 0, 0.3);
         }
 
+        .hero-tag-banner {
+            margin-top: 15px;
+            display: block;
+        }
+
+        .hero-tag-banner img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+
         .hero-subtitle {
             font-size: 13px;
             color: #94a3b8;
@@ -689,6 +700,11 @@
                 </div>
                 <h1 class="hero-title">GUIA DA<br>REGIÃO</h1>
                 <span class="hero-badge-tag">ZONA LESTE CG</span>
+
+                <!-- TAG DO SITE -->
+                <a href="https://ibb.co/Kxgc4v6C" target="_blank" rel="noopener noreferrer" class="hero-tag-banner">
+                    <img src="https://i.ibb.co/TMGDj3cz/tag-site.png" alt="tag-site" border="0">
+                </a>
             </div>
             <p class="hero-subtitle">
                 O mapa de Vagas, Imóveis, Serviços e Gastronomia no Noroeste, Pedrossian, Panorama, Vivendas e Tiradentes
@@ -884,7 +900,7 @@
                     <textarea class="modal-textarea" id="inputDescricao" rows="3" placeholder="Descreva os detalhes..." required></textarea>
                 </div>
 
-                <!-- NOVO CAMPO: UPLOAD DE IMAGEM -->
+                <!-- UPLOAD DE IMAGEM -->
                 <div class="modal-form-group">
                     <label class="modal-label">Foto / Banner do Anúncio (Opcional)</label>
                     <label for="inputImagem" class="file-upload-box">
@@ -911,7 +927,7 @@
         const SUPABASE_KEY = 'sb_publishable_SUpB-jL8O1jj0RNUGZN6Aw_zOQ1POrV';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        /* MSTRAR NOME DO ARQUIVO SELECIONADO */
+        /* MOSTRAR NOME DO ARQUIVO SELECIONADO */
         function updateFileName(input) {
             const preview = document.getElementById('fileNamePreview');
             if (input.files && input.files[0]) {
