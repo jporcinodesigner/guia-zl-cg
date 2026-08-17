@@ -432,6 +432,15 @@
             padding: 16px;
             border-left: 4px solid var(--vagas-blue);
             transition: all 0.2s;
+            overflow: hidden;
+        }
+
+        .card-img-preview {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 12px;
         }
 
         .card-title {
@@ -551,6 +560,8 @@
             border-radius: 20px;
             max-width: 500px;
             width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
             padding: 24px;
             position: relative;
         }
@@ -596,6 +607,31 @@
             color: #fff;
             font-size: 13px;
             outline: none;
+        }
+
+        .file-upload-box {
+            border: 2px dashed #334155;
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .file-upload-box:hover {
+            border-color: var(--orange-primary);
+        }
+
+        .file-upload-box i {
+            font-size: 24px;
+            color: var(--orange-primary);
+            margin-bottom: 6px;
+        }
+
+        .file-upload-box p {
+            font-size: 12px;
+            color: #94a3b8;
         }
 
         .modal-btn-submit {
@@ -848,6 +884,16 @@
                     <textarea class="modal-textarea" id="inputDescricao" rows="3" placeholder="Descreva os detalhes..." required></textarea>
                 </div>
 
+                <!-- NOVO CAMPO: UPLOAD DE IMAGEM -->
+                <div class="modal-form-group">
+                    <label class="modal-label">Foto / Banner do Anúncio (Opcional)</label>
+                    <label for="inputImagem" class="file-upload-box">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <p id="fileNamePreview">Clique para escolher uma imagem (JPG, PNG)</p>
+                    </label>
+                    <input type="file" id="inputImagem" accept="image/*" style="display: none;" onchange="updateFileName(this)">
+                </div>
+
                 <div class="modal-form-group">
                     <label class="modal-label">Seu WhatsApp de Contato</label>
                     <input type="tel" class="modal-input" id="inputWhatsapp" placeholder="(67) 99999-9999" required>
@@ -864,6 +910,16 @@
         const SUPABASE_URL = 'https://hdhlxdqhufcclbyhgexz.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_SUpB-jL8O1jj0RNUGZN6Aw_zOQ1POrV';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        /* MSTRAR NOME DO ARQUIVO SELECIONADO */
+        function updateFileName(input) {
+            const preview = document.getElementById('fileNamePreview');
+            if (input.files && input.files[0]) {
+                preview.innerHTML = `<strong>Selecionado:</strong> ${input.files[0].name}`;
+            } else {
+                preview.innerHTML = 'Clique para escolher uma imagem (JPG, PNG)';
+            }
+        }
 
         /* BUSCAR COMÉRCIOS APROVADOS E EXIBIR */
         async function carregarDados() {
@@ -901,6 +957,7 @@
                     const card = document.createElement('div');
                     card.className = 'custom-card';
                     card.innerHTML = `
+                        ${item.imagem_url ? `<img src="${item.imagem_url}" class="card-img-preview" alt="${item.nome}">` : ''}
                         <div class="card-title">${item.nome || 'Anúncio'}</div>
                         <div class="card-meta">
                             <span><i class="fa-solid fa-location-dot"></i> ${item.bairro || 'Zona Leste'}</span>
@@ -924,7 +981,7 @@
             });
         }
 
-        /* ENVIO DO FORMULÁRIO PARA O SUPABASE */
+        /* ENVIO DO FORMULÁRIO COM UPLOAD DE IMAGEM PARA O SUPABASE */
         async function handleFormSubmit(e) {
             e.preventDefault();
 
@@ -937,11 +994,36 @@
             const bairro = document.getElementById('selectBairro').value;
             const descricao = document.getElementById('inputDescricao').value;
             const whatsapp = document.getElementById('inputWhatsapp').value;
+            const imageInput = document.getElementById('inputImagem');
 
+            let imageUrl = null;
+
+            // Faz o upload do arquivo se tiver uma imagem selecionada
+            if (imageInput.files && imageInput.files.length > 0) {
+                const file = imageInput.files[0];
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+                const { data: uploadData, error: uploadError } = await _supabase.storage
+                    .from('banners')
+                    .upload(fileName, file);
+
+                if (uploadError) {
+                    console.error('Erro no upload da imagem:', uploadError);
+                } else {
+                    // Pega a URL pública da imagem enviada
+                    const { data: publicUrlData } = _supabase.storage
+                        .from('banners')
+                        .getPublicUrl(fileName);
+                    imageUrl = publicUrlData.publicUrl;
+                }
+            }
+
+            // Insere no banco de dados com a URL da imagem
             const { data, error } = await _supabase
                 .from('comercio')
                 .insert([
-                    { categoria, nome, bairro, descricao, whatsapp }
+                    { categoria, nome, bairro, descricao, whatsapp, imagem_url: imageUrl }
                 ]);
 
             submitBtn.disabled = false;
@@ -952,6 +1034,7 @@
             } else {
                 alert('🎉 Solicitação enviada com sucesso!\n\nSeu anúncio foi cadastrado e passará por análise antes de ser publicado.');
                 e.target.reset();
+                document.getElementById('fileNamePreview').innerHTML = 'Clique para escolher uma imagem (JPG, PNG)';
                 closeModal();
             }
         }
