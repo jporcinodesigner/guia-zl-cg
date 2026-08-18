@@ -326,19 +326,26 @@
             color: #ffffff;
         }
 
-        /* CARROSSEL DE DESTAQUES DINÂMICO */
+        /* CARROSSEL DE DESTAQUES OTIMIZADO & FLEXÍVEL */
         .carousel-wrapper {
             position: relative;
             width: 100%;
-            overflow: hidden;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
             margin-bottom: 32px;
             border-radius: 20px;
+            scrollbar-width: none;
+        }
+
+        .carousel-wrapper::-webkit-scrollbar {
+            display: none;
         }
 
         .carousel-track {
             display: flex;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-            width: 100%;
+            gap: 12px;
+            width: max-content;
         }
 
         .highlight-card {
@@ -348,6 +355,9 @@
             box-shadow: 0 10px 30px rgba(255, 106, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-sizing: border-box;
+            width: calc(100vw - 32px);
+            max-width: 568px;
+            scroll-snap-align: center;
             flex-shrink: 0;
         }
 
@@ -723,9 +733,9 @@
                 <h2 class="section-title">DESTAQUES DA REGIÃO</h2>
             </div>
 
-            <div class="carousel-wrapper">
+            <div class="carousel-wrapper" id="carouselWrapper">
                 <div class="carousel-track" id="carouselTrack">
-                    </div>
+                </div>
             </div>
         </section>
 
@@ -886,60 +896,75 @@
 
             Object.values(containers).forEach(c => { if(c) c.innerHTML = ''; });
 
-            // Filtro de destaques de forma flexível (sem problemas com maiúsculas ou espaços)
+            // FILTRO DE DESTAQUES COMPLETO E FLEXÍVEL
             const destaquesPagos = data.filter(item => {
-                const plano = (item.plano || '').toString().trim().toLowerCase();
-                const categoria = (item.categoria || '').toString().trim().toLowerCase();
-                return plano === 'pago' || categoria === 'destaque';
+                const plano = String(item.plano || item.plano_anuncio || '').trim().toLowerCase();
+                const categoria = String(item.categoria || '').trim().toLowerCase();
+                const tipo = String(item.tipo || '').trim().toLowerCase();
+                const isDestaque = item.destaque === true || item.is_destaque === true || String(item.destaque || '').toLowerCase() === 'sim';
+
+                return plano === 'pago' || categoria === 'destaque' || tipo === 'destaque' || isDestaque;
             });
 
-            // Anúncios comuns
-            const anunciosNormais = data.filter(item => {
-                const plano = (item.plano || '').toString().trim().toLowerCase();
-                const categoria = (item.categoria || '').toString().trim().toLowerCase();
-                return plano !== 'pago' && categoria !== 'destaque';
-            });
+            // ANÚNCIOS NORMAIS
+            const anunciosNormais = data.filter(item => !destaquesPagos.includes(item));
 
-            if (destaquesPagos.length > 0 && carouselTrack) {
+            // RENDERIZAÇÃO DOS DESTAQUES
+            if (carouselTrack) {
                 carouselTrack.innerHTML = '';
 
-                destaquesPagos.forEach(item => {
-                    const cleanPhone = (item.whatsapp || '').replace(/\D/g, '');
-                    const waUrl = cleanPhone ? `https://wa.me/55${cleanPhone}?text=Olá,%20vi%20seu%20destaque%20no%20Guia%20Zona%20Leste!` : '#';
-                    const imgUrl = item.midia_url || item.imagem_url || 'https://via.placeholder.com/800x400';
+                if (destaquesPagos.length > 0) {
+                    destaquesPagos.forEach(item => {
+                        const cleanPhone = (item.whatsapp || '').replace(/\D/g, '');
+                        const waUrl = cleanPhone ? `https://wa.me/55${cleanPhone}?text=Olá,%20vi%20seu%20destaque%20no%20Guia%20Zona%20Leste!` : '#';
+                        const imgUrl = item.midia_url || item.imagem_url || item.foto_url || 'https://via.placeholder.com/800x400?text=Destaque+Zona+Leste';
 
-                    const slide = document.createElement('div');
-                    slide.className = 'highlight-card';
-                    slide.innerHTML = `
-                        <div class="highlight-img-container">
-                            <img src="${imgUrl}" alt="${item.nome || 'Destaque'}">
-                        </div>
-                        <div class="highlight-details">
-                            <h3 class="highlight-name">${item.nome || 'DESTAQUE ESPECIAL'}</h3>
-                            <span class="sponsored-tag">Patrocinado</span>
-                            <a href="${waUrl}" target="_blank" class="whatsapp-btn">
-                                <i class="fa-brands fa-whatsapp"></i> ENTRAR EM CONTATO
-                            </a>
+                        const slide = document.createElement('div');
+                        slide.className = 'highlight-card';
+                        slide.innerHTML = `
+                            <div class="highlight-img-container">
+                                <img src="${imgUrl}" alt="${item.nome || 'Destaque'}">
+                            </div>
+                            <div class="highlight-details">
+                                <h3 class="highlight-name">${item.nome || 'DESTAQUE ESPECIAL'}</h3>
+                                <span class="sponsored-tag">Patrocinado</span>
+                                <a href="${waUrl}" target="_blank" class="whatsapp-btn">
+                                    <i class="fa-brands fa-whatsapp"></i> ENTRAR EM CONTATO
+                                </a>
+                            </div>
+                        `;
+                        carouselTrack.appendChild(slide);
+                    });
+
+                    iniciarCarrossel();
+                } else {
+                    // SE NÃO HOUVER DESTAQUES NO BANCO
+                    carouselTrack.innerHTML = `
+                        <div class="highlight-card" style="width: 100%;">
+                            <div class="highlight-details" style="text-align: center; padding: 20px;">
+                                <h3 class="highlight-name">SEJA O PRIMEIRO DESTAQUE</h3>
+                                <p style="font-size: 12px; color: #fff; margin: 8px 0 14px 0;">Anuncie sua empresa no topo da Zona Leste com visibilidade máxima!</p>
+                                <a href="#" onclick="openModal('destaque'); return false;" class="whatsapp-btn" style="background: #ffffff; color: #000;">
+                                    <i class="fa-solid fa-star" style="color: #ff6a00;"></i> QUERO DESTACAR MEU NEGÓCIO
+                                </a>
+                            </div>
                         </div>
                     `;
-                    carouselTrack.appendChild(slide);
-                });
-
-                iniciarCarrossel();
+                }
             }
 
             const contadores = { vaga: 0, imovel: 0, servico: 0, gastronomia: 0 };
 
             anunciosNormais.forEach(item => {
-                const cat = item.categoria || 'servico';
-                const targetContainer = containers[cat];
+                const cat = (item.categoria || 'servico').toLowerCase();
+                const targetContainer = containers[cat] || containers['servico'];
 
                 if (targetContainer) {
-                    contadores[cat]++;
+                    if (contadores[cat] !== undefined) contadores[cat]++;
                     
                     const cleanPhone = (item.whatsapp || '').replace(/\D/g, '');
                     const waUrl = cleanPhone ? `https://wa.me/55${cleanPhone}?text=Olá,%20vi%20seu%20anúncio%20no%20Guia%20Zona%20Leste!` : '#';
-                    const imgUrl = item.midia_url || item.imagem_url;
+                    const imgUrl = item.midia_url || item.imagem_url || item.foto_url;
 
                     const card = document.createElement('div');
                     card.className = 'custom-card';
@@ -1061,38 +1086,34 @@
             }
         }
 
-        /* LÓGICA DO CARROSSEL AUTOMÁTICO (MULTIDESTAQUES DINÂMICO) */
+        /* LÓGICA DO CARROSSEL AUTOMÁTICO MULTIDESTAQUES */
         let carouselInterval = null;
 
         function iniciarCarrossel() {
-            let currentSlide = 0;
+            const wrapper = document.getElementById('carouselWrapper');
             const track = document.getElementById('carouselTrack');
-            if (!track) return;
+            if (!wrapper || !track) return;
 
             const slides = track.querySelectorAll('.highlight-card');
             const totalSlides = slides.length;
 
-            if (totalSlides === 0) return;
-
-            // Ajusta a largura total da trilha conforme a quantidade de itens
-            track.style.width = `${totalSlides * 100}%`;
-
-            // Define o tamanho exato de cada slide proporcionalmente
-            slides.forEach(slide => {
-                slide.style.width = `${100 / totalSlides}%`;
-                slide.style.flexShrink = '0';
-            });
+            if (totalSlides <= 1) return;
 
             if (carouselInterval) clearInterval(carouselInterval);
 
-            // Se houver 2 ou mais itens, rotaciona a cada 3 segundos
-            if (totalSlides > 1) {
-                carouselInterval = setInterval(() => {
-                    currentSlide = (currentSlide + 1) % totalSlides;
-                    const movePercentage = (100 / totalSlides) * currentSlide;
-                    track.style.transform = `translateX(-${movePercentage}%)`;
-                }, 3000);
-            }
+            let currentIndex = 0;
+
+            carouselInterval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                const targetSlide = slides[currentIndex];
+
+                if (targetSlide) {
+                    wrapper.scrollTo({
+                        left: targetSlide.offsetLeft - wrapper.offsetLeft,
+                        behavior: 'smooth'
+                    });
+                }
+            }, 3500);
         }
 
         window.addEventListener('DOMContentLoaded', carregarDados);
