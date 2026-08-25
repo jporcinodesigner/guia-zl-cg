@@ -326,7 +326,7 @@
             color: #ffffff;
         }
 
-        /* CARROSSEL DE DESTAQUES DINÂMICO */
+        /* CARROSSEL DE DESTAQUES DINÂMICO */
         .carousel-wrapper {
             position: relative;
             width: 100%;
@@ -671,6 +671,7 @@
             <a href="#servicos" class="menu-link"><i class="fa-solid fa-wrench"></i> Serviços</a>
             <a href="#gastronomia" class="menu-link"><i class="fa-solid fa-utensils"></i> Gastronomia</a>
             <a href="#destaque" class="menu-link"><i class="fa-solid fa-star"></i> Destaque</a>
+            <a href="#informativos-amape" class="menu-link"><i class="fa-solid fa-bullhorn"></i> AMAPE</a>
         </nav>
     </header>
 
@@ -717,6 +718,7 @@
             </a>
         </div>
 
+        <!-- SEÇÃO DE DESTAQUES PAGO -->
         <section id="destaque">
             <div class="section-header">
                 <i class="fa-solid fa-star"></i>
@@ -725,7 +727,21 @@
 
             <div class="carousel-wrapper">
                 <div class="carousel-track" id="carouselTrack">
-                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO DE INFORMATIVOS AMAPE (NOVA ZONA) -->
+        <section id="informativos-amape" style="margin-bottom: 32px;">
+            <div class="section-header">
+                <i class="fa-solid fa-bullhorn" style="color: var(--orange-primary);"></i>
+                <h2 class="section-title">INFORMATIVOS & COMUNIDADE</h2>
+            </div>
+
+            <div class="carousel-wrapper">
+                <div class="carousel-track" id="carouselTrackInformativos">
+                    <p style="font-size: 13px; color: #94a3b8; padding: 12px;">Carregando informativos...</p>
+                </div>
             </div>
         </section>
 
@@ -886,7 +902,7 @@
 
             Object.values(containers).forEach(c => { if(c) c.innerHTML = ''; });
 
-            // Filtro de destaques de forma flexível (sem problemas com maiúsculas ou espaços)
+            // Filtro de destaques de forma flexível
             const destaquesPagos = data.filter(item => {
                 const plano = (item.plano || '').toString().trim().toLowerCase();
                 const categoria = (item.categoria || '').toString().trim().toLowerCase();
@@ -965,6 +981,52 @@
                     containers[cat].innerHTML = '<p style="font-size: 12px; color: #64748b;">Nenhum anúncio cadastrado nesta seção ainda.</p>';
                 }
             });
+        }
+
+        /* BUSCA E RENDERIZAÇÃO DA TABELA INFORMATIVOS_AMAPE */
+        async function carregarInformativosAmape() {
+            const { data: informativos, error } = await _supabase
+                .from('informativos_amape')
+                .select('*')
+                .eq('ativo', true);
+
+            if (error) {
+                console.error('Erro ao carregar informativos AMAPE:', error);
+                return;
+            }
+
+            const track = document.getElementById('carouselTrackInformativos');
+            if (!track) return;
+
+            if (!informativos || informativos.length === 0) {
+                track.innerHTML = '<p style="font-size: 12px; color: #64748b; padding: 12px;">Nenhum informativo ativo no momento.</p>';
+                return;
+            }
+
+            track.innerHTML = '';
+
+            informativos.forEach(item => {
+                const waUrl = item.link_destino || '#';
+                const imgUrl = item.banner_url || 'https://via.placeholder.com/800x400';
+
+                const slide = document.createElement('div');
+                slide.className = 'highlight-card';
+                slide.innerHTML = `
+                    <div class="highlight-img-container">
+                        <img src="${imgUrl}" alt="${item.titulo || 'Informativo'}">
+                    </div>
+                    <div class="highlight-details">
+                        <h3 class="highlight-name">${item.titulo || 'INFORMATIVO'}</h3>
+                        ${item.descricao ? `<p style="font-size: 12px; color: #ffffff; margin: 8px 0 12px 0; line-height: 1.4; opacity: 0.9;">${item.descricao}</p>` : ''}
+                        <a href="${waUrl}" target="_blank" class="whatsapp-btn">
+                            <i class="fa-brands fa-whatsapp"></i> SAIBAM MAIS / CONTATO
+                        </a>
+                    </div>
+                `;
+                track.appendChild(slide);
+            });
+
+            iniciarCarrosselInformativos();
         }
 
         async function handleFormSubmit(e) {
@@ -1061,22 +1123,13 @@
             }
         }
 
-        /* LÓGICA DO CARROSSEL AUTOMÁTICO (MULTIDESTAQUES DINÂMICO) */
-        /* CORRIGIDO: loop infinito real via clone do 1º slide + reset invisível de transform.
-           Antes, ao chegar no último slide o código voltava com (currentSlide + 1) % totalSlides,
-           o que fazia o transform saltar de volta para 0% USANDO a transition de 0.6s — ou seja,
-           a trilha "varria" visualmente todos os slides de trás para frente até o início.
-           Agora clonamos o primeiro card e o colocamos como um slide extra no final. O carrossel
-           avança normalmente até esse clone (com animação) e, assim que a transição termina
-           (evento 'transitionend'), damos um "teleporte" para o slide real 0 SEM transição
-           (transition: none), o que é imperceptível ao olho humano. Assim o loop fica contínuo. */
+        /* LÓGICA DO CARROSSEL DE DESTAQUES */
         let carouselInterval = null;
 
         function iniciarCarrossel() {
             const track = document.getElementById('carouselTrack');
             if (!track) return;
 
-            // Remove qualquer clone residual de uma execução anterior (defensivo)
             track.querySelectorAll('.highlight-card-clone').forEach(clone => clone.remove());
 
             const originalSlides = Array.from(track.querySelectorAll('.highlight-card'));
@@ -1085,7 +1138,6 @@
             if (carouselInterval) clearInterval(carouselInterval);
             if (totalSlides === 0) return;
 
-            // Apenas 1 destaque: não há o que "loopar", exibe estático ocupando 100%
             if (totalSlides === 1) {
                 track.style.width = '100%';
                 track.style.transform = 'translateX(0%)';
@@ -1094,7 +1146,6 @@
                 return;
             }
 
-            // Clona o primeiro slide e adiciona como slide "fantasma" no final da trilha
             const firstClone = originalSlides[0].cloneNode(true);
             firstClone.classList.add('highlight-card-clone');
             track.appendChild(firstClone);
@@ -1102,20 +1153,17 @@
             const totalWithClone = totalSlides + 1;
             let currentSlide = 0;
 
-            // Ajusta a largura total da trilha (agora contando com o clone)
             track.style.width = `${totalWithClone * 100}%`;
 
-            // Define o tamanho exato de cada slide (real + clone) proporcionalmente
             const allSlides = track.querySelectorAll('.highlight-card');
             allSlides.forEach(slide => {
                 slide.style.width = `${100 / totalWithClone}%`;
                 slide.style.flexShrink = '0';
             });
 
-            // Garante posição inicial correta
             track.style.transition = 'none';
             track.style.transform = 'translateX(0%)';
-            void track.offsetWidth; // força reflow antes de reativar a transição
+            void track.offsetWidth;
 
             function moveToSlide(index, withTransition) {
                 track.style.transition = withTransition
@@ -1125,14 +1173,10 @@
                 track.style.transform = `translateX(-${movePercentage}%)`;
             }
 
-            // Quando a transição termina, se estivermos no slide-clone (posição extra),
-            // "teleportamos" de volta ao slide real 0 sem animação — o clone é idêntico
-            // ao original, então o salto é totalmente imperceptível.
             track.addEventListener('transitionend', function onTransitionEnd(e) {
                 if (e.propertyName !== 'transform') return;
                 if (currentSlide === totalSlides) {
                     currentSlide = 0;
-                    // força o navegador a "esquecer" a transição antes do reset
                     requestAnimationFrame(() => {
                         moveToSlide(0, false);
                         void track.offsetWidth;
@@ -1140,14 +1184,83 @@
                 }
             });
 
-            // Rotaciona a cada 3 segundos, avançando sempre para frente (inclui o clone)
             carouselInterval = setInterval(() => {
                 currentSlide++;
                 moveToSlide(currentSlide, true);
             }, 3000);
         }
 
-        window.addEventListener('DOMContentLoaded', carregarDados);
+        /* LÓGICA DO CARROSSEL DE INFORMATIVOS AMAPE */
+        let carouselIntervalInformativos = null;
+
+        function iniciarCarrosselInformativos() {
+            const track = document.getElementById('carouselTrackInformativos');
+            if (!track) return;
+
+            track.querySelectorAll('.highlight-card-clone').forEach(clone => clone.remove());
+
+            const originalSlides = Array.from(track.querySelectorAll('.highlight-card'));
+            const totalSlides = originalSlides.length;
+
+            if (carouselIntervalInformativos) clearInterval(carouselIntervalInformativos);
+            if (totalSlides === 0) return;
+
+            if (totalSlides === 1) {
+                track.style.width = '100%';
+                track.style.transform = 'translateX(0%)';
+                originalSlides[0].style.width = '100%';
+                originalSlides[0].style.flexShrink = '0';
+                return;
+            }
+
+            const firstClone = originalSlides[0].cloneNode(true);
+            firstClone.classList.add('highlight-card-clone');
+            track.appendChild(firstClone);
+
+            const totalWithClone = totalSlides + 1;
+            let currentSlide = 0;
+
+            track.style.width = `${totalWithClone * 100}%`;
+
+            const allSlides = track.querySelectorAll('.highlight-card');
+            allSlides.forEach(slide => {
+                slide.style.width = `${100 / totalWithClone}%`;
+                slide.style.flexShrink = '0';
+            });
+
+            track.style.transition = 'none';
+            track.style.transform = 'translateX(0%)';
+            void track.offsetWidth;
+
+            function moveToSlide(index, withTransition) {
+                track.style.transition = withTransition
+                    ? 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)'
+                    : 'none';
+                const movePercentage = (100 / totalWithClone) * index;
+                track.style.transform = `translateX(-${movePercentage}%)`;
+            }
+
+            track.addEventListener('transitionend', function onTransitionEnd(e) {
+                if (e.propertyName !== 'transform') return;
+                if (currentSlide === totalSlides) {
+                    currentSlide = 0;
+                    requestAnimationFrame(() => {
+                        moveToSlide(0, false);
+                        void track.offsetWidth;
+                    });
+                }
+            });
+
+            carouselIntervalInformativos = setInterval(() => {
+                currentSlide++;
+                moveToSlide(currentSlide, true);
+            }, 3500);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            carregarDados();
+            carregarInformativosAmape();
+        });
     </script>
 </body>
 </html>
