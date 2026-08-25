@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - Informativos AMAPE</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { box-sizing: border-box; font-family: sans-serif; }
+        body { background: #0b0f17; color: #fff; display: flex; justify-content: center; padding: 20px; }
+        .box { background: #1a2332; padding: 24px; border-radius: 12px; width: 100%; max-width: 480px; }
+        h2 { margin-top: 0; color: #ff6a00; text-transform: uppercase; font-size: 18px; }
+        label { display: block; font-size: 12px; color: #94a3b8; margin: 12px 0 4px; }
+        input { width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 6px; }
+        .check-box { display: flex; align-items: center; gap: 8px; margin: 16px 0; }
+        .check-box input { width: auto; }
+        button { width: 100%; padding: 12px; background: #ff6a00; color: #fff; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; }
+        button:hover { background: #e55f00; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h2>Cadastrar Informativo AMAPE</h2>
+        
+        <form id="adminForm">
+            <label>Título do Banner</label>
+            <input type="text" id="titulo" placeholder="Ex: Reunião Geral da AMAPE" required>
+
+            <label>Link da Imagem (URL do Banner)</label>
+            <input type="url" id="banner_url" placeholder="https://site.com/imagem.jpg" required>
+
+            <label>Link de Destino (WhatsApp ou Web)</label>
+            <input type="url" id="link_destino" placeholder="https://wa.me/5567999999999">
+
+            <div class="check-box">
+                <input type="checkbox" id="ativo" checked>
+                <label for="ativo" style="margin: 0;">Exibir no site imediatamente?</label>
+            </div>
+
+            <button type="submit" id="btnSalvar">SALVAR E PUBLICAR</button>
+        </form>
+    </div>
+
+    <script>
+        // Conexão com o seu projeto Supabase
+        const SUPABASE_URL = 'https://hdhlxdqhufcclbyhgexz.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_SUpB-jL8O1jj0RNUGZN6Aw_zOQ1POrV';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        document.getElementById('adminForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('btnSalvar');
+            btn.disabled = true;
+            btn.innerText = 'SALVANDO...';
+
+            const titulo = document.getElementById('titulo').value;
+            const banner_url = document.getElementById('banner_url').value;
+            const link_destino = document.getElementById('link_destino').value;
+            const ativo = document.getElementById('ativo').checked;
+
+            // Insere diretamente na tabela sem abrir o Supabase
+            const { error } = await _supabase
+                .from('informativos_amape')
+                .insert([{ titulo, banner_url, link_destino, ativo }]);
+
+            btn.disabled = false;
+            btn.innerText = 'SALVAR E PUBLICAR';
+
+            if (error) {
+                alert('Erro ao salvar no banco: ' + error.message);
+            } else {
+                alert('✅ Informativo publicado com sucesso!');
+                e.target.reset();
+                document.getElementById('ativo').checked = true;
+            }
+        });
+    </script>
+</body>
+</html>
